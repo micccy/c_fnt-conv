@@ -4,4 +4,4 @@
 
 **Description:** A small set of tools to deal with linux PC Screen Font (.psf, .psfu) and msdos Code Page Information (.cpi) files
 
-**Status:**_Currently non functional - just created_
+**Status:** _Currently non functional - just created_
