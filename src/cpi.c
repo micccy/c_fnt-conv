@@ -9,6 +9,10 @@ FILE *incpi=NULL;
 long int insize;
 
 uint8_t *buffer=NULL;
+uint16_t cpind;
+struct cpiffh_def *fihead;
+struct cpifih_def *header;
+struct cpiceh_def *curcp;
 
 int main(int argc,char *argv[]){
 	if(argc!=2) errex("Invalid number of arguments");
@@ -22,7 +26,18 @@ int main(int argc,char *argv[]){
 	fclose(incpi); incpi=NULL;																				//Close file
 
 	if((*((uint32_t*)buffer)!=0x4E4F46FF)||(*((uint32_t*)buffer+1)!=0x20202054)) errex("Not a cpi file");	//Check ID
-
+	fihead=(struct cpiffh_def*)buffer;																		//Set pointer to font file header
+	header=(struct cpifih_def*)(buffer+fihead->fihoff);														//Set pointer to font info header
+	curcp=&(header->fcp);																					//Set current codepage pointer to first
+	cpind=0;																								//Set current codepage index to 0
+	while(curcp){
+		printf("%04lX, %s, \'",(uint8_t*)curcp-buffer,(curcp->device==1)?" screen":"printer");
+		for(uint8_t i=0;i<8;i++) putchar((char)curcp->devname[i]);
+		printf("\', CP%u\n",curcp->cpid);
+		if(curcp->next&&(curcp->next!=~0)&&(++cpind<header->cpnum)) 
+			curcp=(struct cpiceh_def*)(buffer+curcp->next);													//Set pointer to next codepage if it exists
+		else curcp=NULL;
+	};
 	return 0;
 };
 
