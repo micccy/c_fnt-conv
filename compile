@@ -1,1 +1,2 @@
 gcc -Wall -o uni src/uni.c
+gcc -Wall -o cpi src/cpi.c

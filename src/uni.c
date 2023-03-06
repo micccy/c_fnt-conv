@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "lib/func.h"
 
-void phelp();
+void phelp(char*);
 
 FILE *bsf;
 long filesize;
