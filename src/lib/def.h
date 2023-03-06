@@ -18,8 +18,8 @@ struct __attribute((__packed__)) psf2h_def{
 struct __attribute((__packed__)) cpiffh_def{	// Font File Header (main)
 	uint8_t id[8];								//0xFF,"FONT   "
 	uint8_t reserved[8];
-	uint16_t pnum;
-	uint8_t ptyp;
+	uint16_t pnum;								//1
+	uint8_t ptyp;								//1
 	uint32_t fihoff;							//Offset to Font Info Header
 };
 
@@ -31,6 +31,24 @@ struct __attribute((__packed__)) cpiceh_def{	// Codepage Entry Header
 	uint16_t cpid;								//Codepage number
 	uint8_t reserved[6];
 	uint32_t cih;								//Might only be uint16_t. Offset to Codepage Info header
+};
+
+struct __attribute((__packed__)) cpicih_def{	// Codepage Info Header
+	uint16_t version;							// 1
+	uint16_t fnum;								//Number of fonts
+	uint16_t fsize;								//Total size of fonts in bytes
+};
+
+struct __attribute((__packed__)) cpisfh_def{	// Screen Font Header
+	uint8_t height;								//Character height (6/8/14/16)
+	uint8_t width;								//Character width (8)
+	uint16_t reserved;
+	uint16_t charnum;							//Number of characters (256)
+};
+
+struct __attribute((__packed__)) cpipfh_def{	// Printer Font Header
+	uint16_t printype;							//Printer type (1=4201/1050/EPS, 2=5202/4208/PPDS)
+	uint16_t slength;							//Length of each of the two escape sequences that follow the header
 };
 
 struct __attribute((__packed__)) cpifih_def{	// Font Info Header

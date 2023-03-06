@@ -9,10 +9,13 @@ FILE *incpi=NULL;
 long int insize;
 
 uint8_t *buffer=NULL;
-uint16_t cpind;
+uint16_t cpind,find;
 struct cpiffh_def *fihead;
 struct cpifih_def *header;
 struct cpiceh_def *curcp;
+struct cpicih_def *curci;
+struct cpisfh_def *cursf;
+struct cpipfh_def *curpf;
 
 int main(int argc,char *argv[]){
 	if(argc!=2) errex("Invalid number of arguments");
@@ -30,10 +33,29 @@ int main(int argc,char *argv[]){
 	header=(struct cpifih_def*)(buffer+fihead->fihoff);														//Set pointer to font info header
 	curcp=&(header->fcp);																					//Set current codepage pointer to first
 	cpind=0;																								//Set current codepage index to 0
-	while(curcp){
-		printf("%04lX, %s, \'",(uint8_t*)curcp-buffer,(curcp->device==1)?" screen":"printer");
+	while(curcp){																							//While the pointed codepage exists
+		printf("%s, \'",(curcp->device==1)?" screen":"printer");
 		for(uint8_t i=0;i<8;i++) putchar((char)curcp->devname[i]);
-		printf("\', CP%u\n",curcp->cpid);
+		printf("\', CP%u, ",curcp->cpid);																	//Print information about codepage
+
+		curci=(struct cpicih_def*)(buffer+(curcp->size<28?curcp->cih&0xFFFF:curcp->cih));					//Set pointer to current codepage information
+		find=0;																								//Set font index to 0;
+		if(curcp->device==1) cursf=(struct cpisfh_def*)((uint8_t*)curci+sizeof(struct cpicih_def));			//Set pointer to current screen font data header
+		else curpf=(struct cpipfh_def*)((uint8_t*)curci+sizeof(struct cpicih_def));							//Set pointer to current printer data header
+		while(find<curci->fnum){																			//While the current font exists
+			if(curcp->device==1){																			//If it's a screen font
+				printf("%04lX: %3u-%ux%2u",(uint8_t*)cursf-buffer,cursf->charnum,cursf->width,cursf->height);	//Dump data about it
+				cursf=(struct cpisfh_def*)((uint8_t*)cursf+sizeof(struct cpisfh_def)+
+				(cursf->height*cursf->charnum));															//Point to next font
+			}else{																							//If it's a printer font
+				printf("%04lX: %4u-%s, %u",(uint8_t*)curpf-buffer,curci->fsize,
+				((curpf->printype==1)?"4201/1050/EPS":"5202/4208/PPDS"),curpf->slength);					//Dump data about it
+				curci->fnum=1;																				//Only one printer font can exist but sometimes is reported as two
+			};
+			if(++find<curci->fnum) printf("\n                            ");
+		};
+		printf("\n");
+
 		if(curcp->next&&(curcp->next!=~0)&&(++cpind<header->cpnum)) 
 			curcp=(struct cpiceh_def*)(buffer+curcp->next);													//Set pointer to next codepage if it exists
 		else curcp=NULL;
