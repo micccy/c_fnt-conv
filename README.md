@@ -6,8 +6,8 @@
 
 **Description:** A small set of tools to deal with linux's PC Screen Font (.psf, .psfu) and msdos' Code Page Information (.cpi) files
 
-Directory "cpdef" contains the definitions of various 8-bit codepages to use for unicode conversion, in the following format:  
-00DF,03B2,0053+005A,0073+007A                     0xE1 (225) : 'ß','β','S'+'Z','s'+'z'  
+**Directory "cpdef"** contains the definitions of various 8-bit codepages to use for unicode conversion, in the following format:  
+``00DF,03B2,0053+005A,0073+007A                     0xE1 (225) : 'ß','β','S'+'Z','s'+'z'``  
 Plese note that this is not a correct definition (that letter doesn't work like that) but it makes an example easy to understand.  
 The first line describes glyph #000, the second line glyph #001 and so on until the 256th line describing glyph #255.  
 Each line contains a set of hexadecimal values separated by ',' or '+'.  
@@ -20,8 +20,8 @@ This "primary" number can be followed exclusively by a ',' before a list of othe
 After all single characters, sequences can be specified by listing all the characters in them separated by a '+', and they must be separeted by ','.  
 A sequence will only display said glyph if no other way to display it exists (if at least one of the characters has no representation elsewhere).
 
-So, the example given above means:  
-The glyph in this position represents U+00DF, the german letter eszett.  
-However, it could also be used to represent U+03B2, the greek letter lowercase beta, if it lacks a proper definition elsewhere  
-Also, if U+0053 (uppercase s) and/or U+005A (uppercase z) cannot be represented at all, and a 'SZ' is encountered, display this glyph instead of them  
-Also, if U+0053 (lowercase s) and/or U+005A (lowercase z) cannot be represented at all, and a 'sz' is encountered, display this glyph instead of them 
+So, the (not real) example given above means:  
+- The glyph in this position represents U+00DF, the german letter eszett.  
+- However, it could also be used to represent U+03B2, the greek letter lowercase beta, if it lacks a proper definition elsewhere  
+- Also, if U+0053 (uppercase s) and/or U+005A (uppercase z) cannot be represented at all, and a 'SZ' is encountered, display this glyph instead of them  
+- Also, if U+0053 (lowercase s) and/or U+005A (lowercase z) cannot be represented at all, and a 'sz' is encountered, display this glyph instead of them 
