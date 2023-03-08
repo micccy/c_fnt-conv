@@ -13,7 +13,7 @@ The first line describes glyph #000, the second line glyph #001 and so on until 
 Each line contains a set of hexadecimal values separated by [,] or [+].  
 I've made them all 4 figures wide and uppercase because it's easier to read, but any formatting is valid as long as it only contains [0-9 A-F a-f] characters separated only by [,+].  
 Anything else will be considered an input termination, which means that you can write any useful comment after the numbers simply starting with any "illegal" character including space and tab.  
-The tool bin/cpretty can read such files and output to stdout the definitions followed by the glyph number in hex and decimal at a fixed position if possible, and prints out the defined characters in utf8. Its output can be redirected to **another** file to get every line automatically formatted and commented.  
+**The tool bin/cpretty** can read such files and output to stdout the definitions followed by the glyph number in hex and decimal at a fixed position if possible, and prints out the defined characters in utf8. Its output can be redirected to **another** file to get every line automatically formatted and commented.  
 The next line begins at the first [0-9 A-F a-f] charater following a linefeed.
 
 **WARNING**: _Do not redirect the output to the same file used as input. This will delete every line except for the first one since data is printed out while the file is being read, instead of after._
