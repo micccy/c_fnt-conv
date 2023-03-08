@@ -52,7 +52,7 @@ uint16_t printline(FILE *f){
 	uint16_t rdc=0;
 	char c=getc(f);
 	while((!((c<'0'||c>'9')&&(c<'A'||c>'F')&&(c<'a'||c>'f')&&(c!=',')&&(c!='+')))&&(!feof(f))){
-		printf("%c",c);
+		printf("%c",(c<'a'||c>'f')?c:c-('a'-'A'));
 		rdc++;
 		c=(uint8_t)getc(cptxtin);
 	};
